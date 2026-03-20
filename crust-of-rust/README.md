@@ -1,0 +1,1 @@
+Notes for Jon Gjengset's [Crust of Rust](https://youtube.com/playlist?list=PLqbS7AVVErFiWDOAVrPt7aYmnuuOLYvOa&si=Hu1-JPOjhTfbdp1i), commented line by line.
