@@ -2,7 +2,6 @@
 use super::cell::Cell;
 use std::cell::UnsafeCell;
 
-
 // This is a state flag for reference state
 #[derive(Clone, Copy)]
 enum RefState {
@@ -23,7 +22,7 @@ pub struct RefCell<T> {
 // https://doc.rust-lang.org/stable/std/cell/struct.Ref.html
 // if we don't use this wrapper, in impl of RefCell, simply returning a Option<T>
 // we are able to set and check the state of RefCell but never able to decrement the shared
-// counter whenever the RefCell borrowed reference is dropped when reaching out of the scope. 
+// counter whenever the RefCell borrowed reference is dropped when reaching out of the scope.
 pub struct Ref<'refcell, T> {
     refcell: &'refcell RefCell<T>,
 }
@@ -39,11 +38,11 @@ impl<T> Drop for Ref<'_, T> {
             RefState::Shared(1) => {
                 // set refstate to unshared because we are the only shared reference
                 self.refcell.refcount.set(RefState::Unshared);
-            },
+            }
             RefState::Shared(n) => {
                 // decrease refstate by 1, there are still other shared refs
                 self.refcell.refcount.set(RefState::Shared(n - 1));
-            },
+            }
             // not possible to be here
             // if a shared reference occurs, either other shared refs are somewhere else
             // or only 1 exclusive reference occurs and no other shared refs.
