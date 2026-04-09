@@ -21,9 +21,11 @@ clustered index
 
 ...
 
-## hash
+## Hash
+Hash index can only be used with equi predicates, due its randomness, using linear hashing is the common way and postgres does it.
+ 
 
-## b+tree
+## B+Tree
 trade offs of btree and ISAM, to build ISAM is not hard. However, ISAM has disadvantage when inserting, it will eventually adding a lot of overflow pages and become linear scan, which lost the point of indexing.
 
 `<key, page ptr>` pairs for each node, search routine is the same as binary search trees.

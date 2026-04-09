@@ -53,7 +53,7 @@ push selections down, consider only left deep join trees to minimise the plan co
 however, pushing selection down on RHS does not help minimise IO, a full scan is still needed to satisfy selection predicate
 
 
-all above are assuming no index
+all above are assuming no index.
 
 
 ## Cost based query optimiser
@@ -228,7 +228,7 @@ column equality of the histogram,
 
 an example,
 
-
+...
 
 
 ## Query optimiser in Postgres
