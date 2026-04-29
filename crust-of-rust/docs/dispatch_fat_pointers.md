@@ -15,7 +15,13 @@ fn do_something_str(data: &str) {...}
 ...
 
 ```
-this could lead to binary bloat but fast, zero cost abstration.
+this could lead to binary bloat but fast, zero cost abstraction. 
+
+Use `nm` to check symbols, can see something like
+```
+0000000000015a10 t _ZN7generic3foo17hb1fa428c062d660cE
+0000000000015a90 t _ZN7generic3foo17hf4ace8e481d6aaadE
+```
 
 
 ## Static dispatch
