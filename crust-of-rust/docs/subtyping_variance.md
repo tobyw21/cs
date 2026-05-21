@@ -113,6 +113,8 @@ struct Serializer<T> {
     // _t: PhantomData<&'a mut T>
     // or use a raw pointer, but lose Send + Sync
     // _t: PhantomData<*mut T>
+
+    // as of now, PhantomData (unstable) introduces covariant, contravariant and invariant.
 }
 
 ```

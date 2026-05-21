@@ -1,4 +1,4 @@
-Notes for Jon Gjengset's [Crust of Rust](https://youtube.com/playlist?list=PLqbS7AVVErFiWDOAVrPt7aYmnuuOLYvOa&si=Hu1-JPOjhTfbdp1i), commented line by line. Those concepts are really content heavy and niche, it is better to keep a set of notes to remind myself when I run into these problems.
+Notes for Jon Gjengset's [Crust of Rust](https://youtube.com/playlist?list=PLqbS7AVVErFiWDOAVrPt7aYmnuuOLYvOa&si=Hu1-JPOjhTfbdp1i), commented line by line. Those concepts are really content heavy or niche, it is better to keep a set of notes to remind myself when I run into these problems.
 - [Lifetime](./docs/lifetime_annotations.md) ([code](./src/lifetime/split.rs))
 - [Subtyping and Variance](./docs/subtyping_variance.md) ([code](./src/subtyping_variance/strtok.rs))
 - [Smart Pointers and Interior Mutability](./docs/smart_pointers.md) ([code](./src/smart_ptrs/))
@@ -7,7 +7,17 @@ Notes for Jon Gjengset's [Crust of Rust](https://youtube.com/playlist?list=PLqbS
 - [Functions, Closures and Their Traits](./docs/functions.md)
 - [Iterators](./docs/iterators.md) ([code](./src/iterator/flatten.rs))
 - [Declarative Macros](./docs/declarative_macros.md) ([code](./src/decl_macro/))
+- [`std::collections`](./docs/collections.md)
+<!-- 
+- [Build Scripts and FFI]()
+- [Sorting Algorithms]()
 
+Concurrency and Async
+- [Atomics and Memory Ordering]()
+- [Channels]()
+- [Async/Await]()
+- [Send, Sync]() 
+-->
 
 
 -----
