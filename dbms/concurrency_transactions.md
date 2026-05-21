@@ -60,6 +60,19 @@ either
 - trx has committed (all writes durable) OR
 - trx has aborted (all writes have been undone)
 
+
+## Deadlock detection and avoidance
+
+To detect deadlock, construct a waits-for graph, each node is represented as transaction number, if conflict happens (different transaction are waiting for others lock), make an edge, in the background, do a DFS scan periodically to detect if loop exists. If deadlock happens, abort one of the transaction and put it to the back of the queue to process later.
+
+
+To avoid deadlock, assign priority based on age, assume Ti wants a lock that Tj holds.
+
+wait - die: if Ti > Tj (has higher priority), Ti waits, else Tj aborts.
+
+wound - wait: if Ti > Tj, Tj aborts else Ti waits.
+
+
 ## Lock manager
 
 Maintains a hash table, keyed on names of objects being locked.
@@ -140,3 +153,13 @@ Substitutability Matrix
     "Are the privileges of `left` a superset of those of `top`?"
     
 ```
+
+# Latches on index
+
+Latches is a way to do locking on B+tree index. Inner nodes of B+tree only routes traffic, don't need to be serializable 2PL.
+
+Read B-link trees.
+
+Some locks to prevent range scan phantom:
+- Next key lock
+- Range lock
