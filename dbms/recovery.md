@@ -140,3 +140,66 @@ when xact aborts
 - flush dirty page to disk (later)
 - write an end record into log when all dirty pages are written to the disk
 - update xact table, set status = complete
+
+
+------
+
+ARIES logging during restart recovery
+
+Analysis
+- reestablish knowledge from last checkpoint, read out DPT and xact table
+- scan log forward from check point
+    + if log type == `END`, means the xact is end before DB crash, kick xact from xact table
+    + if log type == `UPDATE`, means the xact was updating this page before crash, bring back the page to buffer and add entry in DPT, set `recLSN = LSN`
+    + if log type != `END`, add xact to xact table if not present, set `lastLSN = LSN`, change the corresponding xact status.
+- for any xact in committing state
+    + write a corresponding `END` record and remove xact from xact table
+- now all other xacts were active at the time of crash
+    + change state of those running xacts to aborting and write abort log
+- DPT contains which dirty page have not made to the disk
+
+Redo
+- repeat all history to construct the DB state at crash, reapply all xact, even aborted, redo CLRs.
+- scan forward from log record containing smallest `recLSN` in DPT
+    + because in analysis phase, all dirty pages are brought back to DPT and the oldest (smallest) `recLSN` is the earliest record that dirties the page.
+- for each log record or CLR with a given LSN, REDO the action unless:
+    + Affected page is not in DPT, or
+        + how did this happen? page flushed to DB, removed from DPT before checkpoint, then DPT is flushed to checkpoint
+    + Affected page is in DPT but recLSN > LSN, or
+        + how did this happen? page flushed to DB, removed from DPT before checkpoint, the the page is referenced again and reinserted into DPT with a larger `recLSN` before checkpoint, then DPT is flushed to checkpoint
+    + pageLSN (in disk) >= LSN (this case needs IO)
+        + how did this happen? the page was stolen, it was updated and flushed to DB after this record
+- set pageLSN = LSN, no additional logging, no forcing.
+
+Undo
+
+at this point, all xacts in the xact table are "losers"
+
+naive solution:
+- for each loser, perform a xact abort (start or continue xact rollback)
+
+this is simple, but a lot of random IOs following `undoNextLSN` chain
+
+optimisation:
+```
+
+toUndo = MaxHeap(all xact.lastLSN in xact table)
+
+while (!toUndo.isEmpty()):
+    thisLR = toUndo.pop()
+
+    if thisLR.logType == CLR:
+        if (thisLR.undoNextLSN != null):
+            toUndo.insert(thisLR.undoNextLSN)
+        else:
+            write END record for thisLR.xid
+    else:
+        if (thisLR.logType == UPDATE):
+            write CLR for the undo
+            undo the update in DB
+
+        if (thisLR.prevLSN != null):
+            toUndo.insert(thisLR.prevLSN)
+        elif (thisLR.prevLSN == null):
+            write END record for thisLR.xid
+```

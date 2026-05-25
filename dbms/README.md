@@ -1,5 +1,5 @@
 # INDEX
-
+Note that some of these notes have to be restructured and WIP to put more details in.
 1. [Postgres architecture](./postgres_architecture.md)
 2. [Storage layout and memory management](./storage_memory.md)
 3. [Intro to relational operations](./relational_operations.md)
