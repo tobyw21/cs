@@ -52,7 +52,6 @@ vec.erase(std::remove_if(vec.begin(), vec.end(), pred), vec.end());
 Similar to `Rust`'s trait bound
 
 
-
 ## Lambda
 `[capture](parameter) -> optional return type {code}`
 
@@ -78,3 +77,6 @@ int test(Predicate pred) {
 
 ## Algorithms
 Just a bunch of template functions act on containers, look into [`<algorithm>`](https://en.cppreference.com/cpp/header/algorithm) and [example code](../src/stl/algos.cc)
+
+## `<ranges>`
+`std::ranges::views` has functional style algorithms which is lazy loaded, very interesting, somewhat similar to `Rust`'s iterators like `Map`, `Flatten`, `Filter`.
